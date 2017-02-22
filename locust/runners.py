@@ -30,6 +30,7 @@ SLAVE_REPORT_INTERVAL = 3.0
 class LocustRunner(object):
     client_index = 0
     def __init__(self, locust_classes, options):
+        self.options = options
         self.locust_classes = locust_classes
         self.hatch_rate = options.hatch_rate
         self.num_clients = options.num_clients
@@ -44,8 +45,9 @@ class LocustRunner(object):
         # register listener that resets stats when hatching is complete
         def on_hatch_complete(user_count):
             self.state = STATE_RUNNING
-            logger.info("Resetting stats\n")
-            self.stats.reset_all()
+            if not self.options.no_reset_stats:
+                logger.info("Resetting stats\n")
+                self.stats.reset_all()
         events.hatch_complete += on_hatch_complete
 
     @property
