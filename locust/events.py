@@ -125,3 +125,12 @@ locust_stop_hatching = EventHook()
 """
 *locust_stop_hatching* is fired when terminate the hatching process on any locust worker.
 """
+
+state_changed = EventHook()
+"""
+*state_changed* is fired whenever the current LocustRunner's state changes.
+
+The event is fired with the following arguments:
+* *previous*: The old state. This will be None when Locust initially changes to STATE_INIT.
+* *current*: The new state. This will always be STATE_INIT, STATE_HATCHING, STATE_RUNNING, or STATE_STOPPED as found in locust.runners.
+"""
