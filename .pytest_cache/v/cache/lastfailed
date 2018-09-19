@@ -1,0 +1,14 @@
+{
+  "examples/browse_docs_sequence_test.py": true,
+  "examples/browse_docs_test.py": true,
+  "locust/test/test_client.py": true,
+  "locust/test/test_locust_class.py": true,
+  "locust/test/test_main.py": true,
+  "locust/test/test_parser.py": true,
+  "locust/test/test_runners.py": true,
+  "locust/test/test_stats.py": true,
+  "locust/test/test_task_sequence_class.py": true,
+  "locust/test/test_taskratio.py": true,
+  "locust/test/test_util.py": true,
+  "locust/test/test_web.py": true
+}
