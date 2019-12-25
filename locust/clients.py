@@ -1,14 +1,12 @@
 import re
 import time
+from urllib.parse import urlparse, urlunparse
 
 import requests
-import six
 from requests import Request, Response
 from requests.auth import HTTPBasicAuth
 from requests.exceptions import (InvalidSchema, InvalidURL, MissingSchema,
                                  RequestException)
-
-from six.moves.urllib.parse import urlparse, urlunparse
 
 from . import events
 from .exception import CatchResponseError, ResponseError
@@ -133,7 +131,7 @@ class HttpSession(requests.Session):
             if name:
                 # Since we use the Exception message when grouping failures, in order to not get 
                 # multiple failure entries for different URLs for the same name argument, we need 
-                # to temporarily override the reponse.url attribute
+                # to temporarily override the response.url attribute
                 orig_url = response.url
                 response.url = name
             try:
@@ -245,7 +243,7 @@ class ResponseContextManager(LocustResponse):
                 if response.content == b"":
                     response.failure("No data")
         """
-        if isinstance(exc, six.string_types):
+        if isinstance(exc, str):
             exc = CatchResponseError(exc)
         
         events.request_failure.fire(

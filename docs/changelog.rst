@@ -4,6 +4,11 @@ Changelog Highlights
 
 For full details of the Locust changelog, please see https://github.com/locustio/locust/blob/master/CHANGELOG.md
 
+0.14.0
+======
+
+Drop support for Python 2.7 and no longer utilize six for backwards compatibility.
+
 0.13.5
 ======
 

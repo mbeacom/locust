@@ -1,22 +1,13 @@
 from __future__ import absolute_import
 
 import re
-import six
 import socket
 from base64 import b64encode
-from six.moves.urllib.parse import urlparse, urlunparse
+from urllib.parse import urlparse, urlunparse
 from ssl import SSLError
 from timeit import default_timer
 
-if six.PY2:
-    from cookielib import CookieJar
-    class ConnectionRefusedError(Exception):
-        # ConnectionRefusedError doesn't exist in python 2, so we'll 
-        # define a dummy class to avoid a NameError
-        pass
-else:
-    from http.cookiejar import CookieJar
-    unicode = str
+from http.cookiejar import CookieJar
 
 import gevent
 from gevent.timeout import Timeout
@@ -59,7 +50,7 @@ class FastHttpLocust(Locust):
     """
     Represents an HTTP "user" which is to be hatched and attack the system that is to be load tested.
     
-    The behaviour of this user is defined by the task_set attribute, which should point to a 
+    The behavior of this user is defined by the task_set attribute, which should point to a 
     :py:class:`TaskSet <locust.core.TaskSet>` class.
     
     This class creates a *client* attribute on instantiation which is an HTTP client with support 
@@ -82,7 +73,7 @@ class FastHttpLocust(Locust):
         self.client = FastHttpSession(base_url=self.host)
 
 
-class FastHttpSession(object):
+class FastHttpSession:
     auth_header = None
     
     def __init__(self, base_url, **kwargs):
@@ -269,7 +260,7 @@ class FastResponse(CompatResponse):
         return content
     
     def raise_for_status(self):
-        """Raise any connection errors that occured during the request"""
+        """Raise any connection errors that occurred during the request"""
         if hasattr(self, 'error') and self.error:
             raise self.error
     
@@ -287,7 +278,7 @@ class FastResponse(CompatResponse):
         return super(FastResponse, self)._content()
 
 
-class ErrorResponse(object):
+class ErrorResponse:
     """
     This is used as a dummy response object when geventhttpclient raises an error 
     that doesn't have a real Response object attached. E.g. a socket error or similar
@@ -384,7 +375,7 @@ class ResponseContextManager(FastResponse):
                 if response.content == "":
                     response.failure("No data")
         """
-        if isinstance(exc, six.string_types):
+        if isinstance(exc, str):
             exc = CatchResponseError(exc)
         
         events.request_failure.fire(

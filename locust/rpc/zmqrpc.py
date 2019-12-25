@@ -3,7 +3,7 @@ import zmq.green as zmq
 from .protocol import Message
 from locust.util.exception_handler import retry
 
-class BaseSocket(object):
+class BaseSocket:
     def __init__(self, sock_type):
         context = zmq.Context()
         self.socket = context.socket(sock_type)

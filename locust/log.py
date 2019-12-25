@@ -18,7 +18,7 @@ def setup_logging(loglevel, logfile):
 stdout_logger = logging.getLogger("stdout")
 stderr_logger = logging.getLogger("stderr")
 
-class StdOutWrapper(object):
+class StdOutWrapper:
     """
     Wrapper for stdout
     """
@@ -32,7 +32,7 @@ class StdOutWrapper(object):
         """No-op for wrapper"""
         pass
 
-class StdErrWrapper(object):
+class StdErrWrapper:
     """
     Wrapper for stderr
     """

@@ -17,7 +17,7 @@ from locust.wait_time import between, constant
 
 
 def mocked_rpc():
-    class MockedRpcServerClient(object):
+    class MockedRpcServerClient:
         queue = Queue()
         outbox = []
 
@@ -47,7 +47,7 @@ def mocked_rpc():
     return MockedRpcServerClient
 
 
-class mocked_options(object):
+class mocked_options:
     def __init__(self):
         self.hatch_rate = 5
         self.num_clients = 5
@@ -499,7 +499,7 @@ class TestMasterRunner(LocustTestCase):
         runner = LocalLocustRunner([MyLocust], self.options)
         l = MyLocust()
         
-        # supress stderr
+        # surpress stderr
         with mock.patch("sys.stderr") as mocked:
             l.task_set._task_queue = [l.task_set.will_error, l.task_set.will_stop]
             self.assertRaises(LocustError, l.run) # make sure HeyAnException isn't raised
@@ -648,7 +648,7 @@ class TestStopTimeout(LocustTestCase):
             runner.quit()
             runner.greenlet.join()
         except gevent.Timeout:
-            self.fail("Got Timeout exception. Some locusts must have kept runnining after iteration finish")
+            self.fail("Got Timeout exception. Some locusts must have kept running after iteration finish")
         finally:
             timeout.cancel()
         self.assertEqual("third", MyTaskSet.state)
@@ -776,7 +776,7 @@ class TestStopTimeout(LocustTestCase):
             runner.kill_locusts(1)
             runner.locusts.join()
         except gevent.Timeout:
-            self.fail("Got Timeout exception. Some locusts must have kept runnining after iteration finish")
+            self.fail("Got Timeout exception. Some locusts must have kept running after iteration finish")
         finally:
             timeout.cancel()
         self.assertEqual("third", MyTaskSet.state)

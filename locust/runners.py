@@ -8,11 +8,8 @@ from uuid import uuid4
 from time import time
 
 import gevent
-import six
 from gevent import GreenletExit
 from gevent.pool import Group
-
-from six.moves import xrange
 
 from . import events
 from .rpc import Message, rpc
@@ -28,7 +25,7 @@ SLAVE_REPORT_INTERVAL = 3.0
 
 LOCUST_STATE_RUNNING, LOCUST_STATE_WAITING, LOCUST_STATE_STOPPING = ["running", "waiting", "stopping"]
 
-class LocustRunner(object):
+class LocustRunner:
     def __init__(self, locust_classes, options):
         self.options = options
         self.locust_classes = locust_classes
@@ -83,7 +80,7 @@ class LocustRunner(object):
             # create locusts depending on weight
             percent = locust.weight / float(weight_sum)
             num_locusts = int(round(amount * percent))
-            bucket.extend([locust for x in xrange(0, num_locusts)])
+            bucket.extend([locust for x in range(0, num_locusts)])
             # used to keep track of the amount of rounding was done if we need
             # to add/remove some instances from bucket
             residuals[locust] = amount * percent - round(amount * percent)
@@ -120,7 +117,7 @@ class LocustRunner(object):
             sleep_time = 1.0 / self.hatch_rate
             while True:
                 if not bucket:
-                    logger.info("All locusts hatched: %s" % ", ".join(["%s: %d" % (name, count) for name, count in six.iteritems(occurrence_count)]))
+                    logger.info("All locusts hatched: %s" % ", ".join(["%s: %d" % (name, count) for name, count in occurrence_count.items()]))
                     events.hatch_complete.fire(user_count=self.num_clients)
                     return
 
@@ -285,7 +282,7 @@ class DistributedLocustRunner(LocustRunner):
         self.heartbeat_liveness = options.heartbeat_liveness
         self.heartbeat_interval = options.heartbeat_interval
 
-class SlaveNode(object):
+class SlaveNode:
     def __init__(self, id, state=STATE_INIT, heartbeat_liveness=3):
         self.id = id
         self.state = state
@@ -298,11 +295,11 @@ class MasterLocustRunner(DistributedLocustRunner):
 
         class SlaveNodesDict(dict):
             def get_by_state(self, state):
-                return [c for c in six.itervalues(self) if c.state == state]
+                return [c for c in self.values() if c.state == state]
             
             @property
             def all(self):
-                return six.itervalues(self)
+                return self.values()
 
             @property
             def ready(self):
@@ -338,7 +335,7 @@ class MasterLocustRunner(DistributedLocustRunner):
     
     @property
     def user_count(self):
-        return sum([c.user_count for c in six.itervalues(self.clients)])
+        return sum([c.user_count for c in self.clients.values()])
     
     def start_hatching(self, locust_count, hatch_rate):
         num_slaves = len(self.clients.ready) + len(self.clients.running) + len(self.clients.hatching)
@@ -428,7 +425,7 @@ class MasterLocustRunner(DistributedLocustRunner):
                 self.clients[msg.node_id].state = STATE_RUNNING
                 self.clients[msg.node_id].user_count = msg.data["count"]
                 if len(self.clients.hatching) == 0:
-                    count = sum(c.user_count for c in six.itervalues(self.clients))
+                    count = sum(c.user_count for c in self.clients.values())
                     events.hatch_complete.fire(user_count=count)
             elif msg.type == "quit":
                 if msg.node_id in self.clients:

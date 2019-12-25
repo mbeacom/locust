@@ -1,4 +1,3 @@
-import six
 import warnings
 
 
@@ -7,10 +6,7 @@ warnings.filterwarnings('always', category=DeprecationWarning, module="locust")
 
 
 def get_class_func(f):
-    if six.PY2:
-        return f.__func__
-    else:
-        return f
+    return f
 
 def check_for_deprecated_wait_api(locust_or_taskset):
     # check if deprecated wait API is used

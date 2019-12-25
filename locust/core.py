@@ -6,10 +6,8 @@ from time import time
 
 import gevent
 import gevent.lock
-import six
 
 from gevent import GreenletExit, monkey
-from six.moves import xrange
 
 # The monkey patching must run before requests is imported, or else 
 # we'll get an infinite recursion when doing SSL/HTTPS requests.
@@ -87,7 +85,7 @@ def seq_task(order):
     return decorator_func
 
 
-class NoClientWarningRaiser(object):
+class NoClientWarningRaiser:
     """
     The purpose of this class is to emit a sensible error message for old test scripts that 
     inherits from Locust, and expects there to be an HTTP client under the client attribute.
@@ -96,11 +94,11 @@ class NoClientWarningRaiser(object):
         raise LocustError("No client instantiated. Did you intend to inherit from HttpLocust?")
 
 
-class Locust(object):
+class Locust:
     """
     Represents a "user" which is to be hatched and attack the system that is to be load tested.
     
-    The behaviour of this user is defined by the task_set attribute, which should point to a 
+    The behavior of this user is defined by the task_set attribute, which should point to a 
     :py:class:`TaskSet <locust.core.TaskSet>` class.
     
     This class should usually be subclassed by a class that defines some kind of client. For 
@@ -139,7 +137,7 @@ class Locust(object):
     """
     
     task_set = None
-    """TaskSet class that defines the execution behaviour of this locust"""
+    """TaskSet class that defines the execution behavior of this locust"""
 
     weight = 10
     """Probability of locust being chosen. The higher the weight, the greater is the chance of it being chosen."""
@@ -180,7 +178,13 @@ class Locust(object):
         except StopLocust:
             pass
         except (RescheduleTask, RescheduleTaskImmediately) as e:
-            six.reraise(LocustError, LocustError("A task inside a Locust class' main TaskSet (`%s.task_set` of type `%s`) seems to have called interrupt() or raised an InterruptTaskSet exception. The interrupt() function is used to hand over execution to a parent TaskSet, and should never be called in the main TaskSet which a Locust class' task_set attribute points to." % (type(self).__name__, self.task_set.__name__)), sys.exc_info()[2])
+            raise LocustError(
+                "A task inside a Locust class' main TaskSet (`%s.task_set` of type `%s`) "
+                "seems to have called interrupt() or raised an InterruptTaskSet exception. "
+                "The interrupt() function is used to hand over execution to a parent TaskSet, "
+                "and should never be called in the main TaskSet which a Locust class' task_set "
+                "attribute points to." % (type(self).__name__, self.task_set.__name__)
+            ).with_traceback()
         except GreenletExit as e:
             if runner:
                 runner.state = STATE_CLEANUP
@@ -194,7 +198,7 @@ class HttpLocust(Locust):
     """
     Represents an HTTP "user" which is to be hatched and attack the system that is to be load tested.
     
-    The behaviour of this user is defined by the task_set attribute, which should point to a 
+    The behavior of this user is defined by the task_set attribute, which should point to a 
     :py:class:`TaskSet <locust.core.TaskSet>` class.
     
     This class creates a *client* attribute on instantiation which is an HTTP client with support 
@@ -239,27 +243,27 @@ class TaskSetMeta(type):
         if "tasks" in classDict and classDict["tasks"] is not None:
             tasks = classDict["tasks"]
             if isinstance(tasks, dict):
-                tasks = six.iteritems(tasks)
+                tasks = tasks.items()
             
             for task in tasks:
                 if isinstance(task, tuple):
                     task, count = task
-                    for i in xrange(0, count):
+                    for i in range(0, count):
                         new_tasks.append(task)
                 else:
                     new_tasks.append(task)
         
-        for item in six.itervalues(classDict):
+        for item in classDict.values():
             if hasattr(item, "locust_task_weight"):
-                for i in xrange(0, item.locust_task_weight):
+                for i in range(0, item.locust_task_weight):
                     new_tasks.append(item)
         
         classDict["tasks"] = new_tasks
         
         return type.__new__(mcs, classname, bases, classDict)
 
-@six.add_metaclass(TaskSetMeta)
-class TaskSet(object):
+
+class TaskSet(metaclass=TaskSetMeta):
     """
     Class defining a set of tasks that a Locust user will execute. 
     
@@ -379,9 +383,9 @@ class TaskSet(object):
                 self.on_start()
         except InterruptTaskSet as e:
             if e.reschedule:
-                six.reraise(RescheduleTaskImmediately, RescheduleTaskImmediately(e.reschedule), sys.exc_info()[2])
+                raise RescheduleTaskImmediately(e.reschedule).with_traceback()
             else:
-                six.reraise(RescheduleTask, RescheduleTask(e.reschedule), sys.exc_info()[2])
+                raise RescheduleTask(e.reschedule).with_traceback()
         
         while (True):
             try:
@@ -404,9 +408,9 @@ class TaskSet(object):
                     self.wait()
             except InterruptTaskSet as e:
                 if e.reschedule:
-                    six.reraise(RescheduleTaskImmediately, RescheduleTaskImmediately(e.reschedule), sys.exc_info()[2])
+                    raise RescheduleTaskImmediately(e.reschedule).with_traceback()
                 else:
-                    six.reraise(RescheduleTask, RescheduleTask(e.reschedule), sys.exc_info()[2])
+                    raise RescheduleTask(e.reschedule).with_traceback()
             except StopLocust:
                 raise
             except GreenletExit:
