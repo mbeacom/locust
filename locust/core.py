@@ -184,7 +184,7 @@ class Locust:
                 "The interrupt() function is used to hand over execution to a parent TaskSet, "
                 "and should never be called in the main TaskSet which a Locust class' task_set "
                 "attribute points to." % (type(self).__name__, self.task_set.__name__)
-            ).with_traceback()
+            ).with_traceback(sys.exc_info()[2])
         except GreenletExit as e:
             if runner:
                 runner.state = STATE_CLEANUP
@@ -382,10 +382,11 @@ class TaskSet(metaclass=TaskSetMeta):
             if hasattr(self, "on_start"):
                 self.on_start()
         except InterruptTaskSet as e:
+            traceback = sys.exc_info()[2]
             if e.reschedule:
-                raise RescheduleTaskImmediately(e.reschedule).with_traceback()
+                raise RescheduleTaskImmediately(e.reschedule).with_traceback(traceback)
             else:
-                raise RescheduleTask(e.reschedule).with_traceback()
+                raise RescheduleTask(e.reschedule).with_traceback(traceback)
         
         while (True):
             try:
@@ -407,10 +408,11 @@ class TaskSet(metaclass=TaskSetMeta):
                 else:
                     self.wait()
             except InterruptTaskSet as e:
+                traceback = sys.exc_info()[2]
                 if e.reschedule:
-                    raise RescheduleTaskImmediately(e.reschedule).with_traceback()
+                    raise RescheduleTaskImmediately(e.reschedule).with_traceback(traceback)
                 else:
-                    raise RescheduleTask(e.reschedule).with_traceback()
+                    raise RescheduleTask(e.reschedule).with_traceback(traceback)
             except StopLocust:
                 raise
             except GreenletExit:
