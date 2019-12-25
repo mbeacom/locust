@@ -23,7 +23,7 @@ class TestFastHttpSession(WebserverTestCase):
         self.assertEqual(None, r.content)
         self.assertEqual(1, len(global_stats.errors))
         self.assertTrue(isinstance(r.error, ConnectionRefusedError))
-        self.assertTrue(isinstance(next(global_stats.errors.values()).error, ConnectionRefusedError))
+        self.assertTrue(isinstance(next(iter(global_stats.errors.values())).error, ConnectionRefusedError))
     
     def test_404(self):
         global_stats.clear_all()
@@ -292,7 +292,7 @@ class TestFastHttpLocustClass(WebserverTestCase):
 
 class TestFastHttpCatchResponse(WebserverTestCase):
     def setUp(self):
-        super(TestFastHttpCatchResponse, self).setUp()
+        super().setUp()
         
         class MyLocust(FastHttpLocust):
             host = "http://127.0.0.1:%i" % self.port

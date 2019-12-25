@@ -137,14 +137,14 @@ class TestLocustRunner(LocustTestCase):
 
 class TestMasterRunner(LocustTestCase):
     def setUp(self):
-        super(TestMasterRunner, self).setUp()
+        super().setUp()
         global_stats.reset_all()
         self._slave_report_event_handlers = [h for h in events.slave_report._handlers]
         self.options = mocked_options()
         
     def tearDown(self):
         events.slave_report._handlers = self._slave_report_event_handlers
-        super(TestMasterRunner, self).tearDown()
+        super().tearDown()
     
     def test_slave_connect(self):
         class MyTestLocust(Locust):
@@ -478,7 +478,7 @@ class TestMasterRunner(LocustTestCase):
         
         class MyTaskSet(TaskSet):
             def __init__(self, *a, **kw):
-                super(MyTaskSet, self).__init__(*a, **kw)
+                super().__init__(*a, **kw)
                 self._task_queue = [
                     {"callable":self.will_error, "args":[], "kwargs":{}}, 
                     {"callable":self.will_stop, "args":[], "kwargs":{}},
@@ -517,13 +517,13 @@ class TestMasterRunner(LocustTestCase):
 
 class TestSlaveLocustRunner(LocustTestCase):
     def setUp(self):
-        super(TestSlaveLocustRunner, self).setUp()
+        super().setUp()
         global_stats.reset_all()
         self._report_to_master_event_handlers = [h for h in events.report_to_master._handlers]
         
     def tearDown(self):
         events.report_to_master._handlers = self._report_to_master_event_handlers
-        super(TestSlaveLocustRunner, self).tearDown()
+        super().tearDown()
     
     def test_slave_stop_timeout(self):
         class MyTestLocust(Locust):

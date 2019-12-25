@@ -64,7 +64,7 @@ class FastHttpLocust(Locust):
     """
     
     def __init__(self):
-        super(FastHttpLocust, self).__init__()
+        super().__init__()
         if self.host is None:
             raise LocustError("You must specify the base host. Either in the host attribute in the Locust class, or on the command line using the --host option.")
         if not re.match(r"^https?://[^/]+$", self.host, re.I):
@@ -274,7 +274,7 @@ class FastResponse(CompatResponse):
     def _content(self):
         if self.headers is None:
             return None
-        return super(FastResponse, self)._content()
+        return super()._content()
 
 
 class ErrorResponse:

@@ -260,7 +260,7 @@ class LocustRunner:
 
 class LocalLocustRunner(LocustRunner):
     def __init__(self, locust_classes, options):
-        super(LocalLocustRunner, self).__init__(locust_classes, options)
+        super().__init__(locust_classes, options)
 
         # register listener thats logs the exception for the local runner
         def on_locust_error(locust_instance, exception, tb):
@@ -269,12 +269,12 @@ class LocalLocustRunner(LocustRunner):
         events.locust_error += on_locust_error
 
     def start_hatching(self, locust_count=None, hatch_rate=None, wait=False):
-        self.hatching_greenlet = gevent.spawn(lambda: super(LocalLocustRunner, self).start_hatching(locust_count, hatch_rate, wait=wait))
+        self.hatching_greenlet = gevent.spawn(lambda: super().start_hatching(locust_count, hatch_rate, wait=wait))
         self.greenlet = self.hatching_greenlet
 
 class DistributedLocustRunner(LocustRunner):
     def __init__(self, locust_classes, options):
-        super(DistributedLocustRunner, self).__init__(locust_classes, options)
+        super().__init__(locust_classes, options)
         self.master_host = options.master_host
         self.master_port = options.master_port
         self.master_bind_host = options.master_bind_host
@@ -291,7 +291,7 @@ class SlaveNode:
 
 class MasterLocustRunner(DistributedLocustRunner):
     def __init__(self, *args, **kwargs):
-        super(MasterLocustRunner, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         class SlaveNodesDict(dict):
             def get_by_state(self, state):
@@ -443,7 +443,7 @@ class MasterLocustRunner(DistributedLocustRunner):
 
 class SlaveLocustRunner(DistributedLocustRunner):
     def __init__(self, *args, **kwargs):
-        super(SlaveLocustRunner, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.client_id = socket.gethostname() + "_" + uuid4().hex
         
         self.client = rpc.Client(self.master_host, self.master_port, self.client_id)

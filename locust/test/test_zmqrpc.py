@@ -7,14 +7,14 @@ from locust.test.testcases import LocustTestCase
 
 class ZMQRPC_tests(LocustTestCase):
     def setUp(self):
-        super(ZMQRPC_tests, self).setUp()
+        super().setUp()
         self.server = zmqrpc.Server('127.0.0.1', 0)
         self.client = zmqrpc.Client('localhost', self.server.port, 'identity')
 
     def tearDown(self):
         self.server.socket.close()
         self.client.socket.close()
-        super(ZMQRPC_tests, self).tearDown()
+        super().tearDown()
 
     def test_constructor(self):
         self.assertEqual(self.server.socket.getsockopt(zmq.TCP_KEEPALIVE), 1)

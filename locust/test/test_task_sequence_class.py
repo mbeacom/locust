@@ -8,7 +8,7 @@ from .testcases import LocustTestCase, WebserverTestCase
 
 class TestTaskSet(LocustTestCase):
     def setUp(self):
-        super(TestTaskSet, self).setUp()
+        super().setUp()
 
         class User(Locust):
             host = "127.0.0.1"

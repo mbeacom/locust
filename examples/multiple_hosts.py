@@ -7,7 +7,7 @@ class MultipleHostsLocust(HttpLocust):
     abstract = True
     
     def __init__(self, *args, **kwargs):
-        super(MultipleHostsLocust, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.api_client = HttpSession(base_url=os.environ["API_HOST"])
     
 

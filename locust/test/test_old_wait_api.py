@@ -11,7 +11,7 @@ from .testcases import LocustTestCase, WebserverTestCase
 
 class TestOldWaitApi(LocustTestCase):
     def setUp(self):
-        super(TestOldWaitApi, self).setUp()
+        super().setUp()
     
     def test_wait_function(self):
         with warnings.catch_warnings(record=True) as w:

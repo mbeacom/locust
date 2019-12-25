@@ -69,11 +69,11 @@ class NotLocustSubclass():
             file.write(self.mock_locust_file_content)
 
     def setUp(self):
-        super(TestLoadLocustfile, self).setUp()
+        super().setUp()
 
     def tearDown(self):
         os.remove(self.file_path)
-        super(TestLoadLocustfile, self).tearDown()
+        super().tearDown()
 
     def test_load_locust_file_from_absolute_path(self):
         self.__create_mock_locust_file('mock_locust_file.py')

@@ -23,7 +23,7 @@ SWARM_DATA_WITH_STEP_LOAD = {"locust_count":5, "hatch_rate":2, "step_locust_coun
 
 class TestWebUI(LocustTestCase):
     def setUp(self):
-        super(TestWebUI, self).setUp()
+        super().setUp()
         
         stats.global_stats.clear_all()
         parser = parse_options(default_config_files=[])[0]
@@ -38,7 +38,7 @@ class TestWebUI(LocustTestCase):
         self.web_port = self._web_ui_server.server_port
     
     def tearDown(self):
-        super(TestWebUI, self).tearDown()
+        super().tearDown()
         runners.locust_runner = None
         self._web_ui_server.stop()
     

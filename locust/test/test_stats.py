@@ -270,7 +270,7 @@ class TestStatsPrinting(LocustTestCase):
 
 class TestStatsEntryResponseTimesCache(unittest.TestCase):
     def setUp(self, *args, **kwargs):
-        super(TestStatsEntryResponseTimesCache, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         self.stats = RequestStats()
     
     def test_response_times_cached(self):
@@ -364,7 +364,7 @@ class TestStatsEntry(unittest.TestCase):
         return tokens
 
     def setUp(self, *args, **kwargs):
-        super(TestStatsEntry, self).setUp(*args, **kwargs)
+        super().setUp(*args, **kwargs)
         self.stats = RequestStats()
 
     def test_fail_ratio_with_no_failures(self):

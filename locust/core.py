@@ -150,7 +150,7 @@ class Locust:
     _state = False
     
     def __init__(self):
-        super(Locust, self).__init__()
+        super().__init__()
         # check if deprecated wait API is used
         deprecation.check_for_deprecated_wait_api(self)
         
@@ -219,7 +219,7 @@ class HttpLocust(Locust):
     """
     
     def __init__(self):
-        super(HttpLocust, self).__init__()
+        super().__init__()
         if self.host is None:
             raise LocustError("You must specify the base host. Either in the host attribute in the Locust class, or on the command line using the --host option.")
 
@@ -532,7 +532,7 @@ class TaskSequence(TaskSet):
     """
 
     def __init__(self, parent):
-        super(TaskSequence, self).__init__(parent)
+        super().__init__(parent)
         self._index = 0
         self.tasks.sort(key=lambda t: t.locust_task_order if hasattr(t, 'locust_task_order') else 1)
 
