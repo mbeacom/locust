@@ -240,12 +240,11 @@ class FastResponse(CompatResponse):
     @property
     def text(self):
         """
-        Returns the text content of the response as a decoded string
-        (unicode on python2)
+        Returns the text content of the response as a decoded string.
         """
         try:
             charset = self.headers.get('content-type', '').partition("charset=")[2]
-            content = unicode(self.content, charset or 'utf-8', errors='replace')
+            content = str(self.content, charset or 'utf-8', errors='replace')
         except (LookupError, TypeError):
             # A LookupError is raised if the encoding was not found which could
             # indicate a misspelling or similar mistake.
@@ -256,7 +255,7 @@ class FastResponse(CompatResponse):
             if self.content is None:
                 content = None
             else:
-                content = unicode(self.content, errors='replace')
+                content = str(self.content, errors='replace')
         return content
     
     def raise_for_status(self):
