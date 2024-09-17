@@ -55,7 +55,7 @@
     "react-markdown": "^9.0.0",
     "react-redux": "^9.1.2",
     "rimraf": "^6.0.1",
-    "vite": "^5.3.5",
+    "vite": "^5.3.6",
     "vite-plugin-checker": "^0.7.2",
     "vite-plugin-dts": "^3.9.1",
     "vite-plugin-singlefile": "^2.0.2",
